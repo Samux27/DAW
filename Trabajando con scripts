@@ -1,0 +1,71 @@
+--1
+if["#" -ne "1"]
+then 
+    echo "Error.falta el numero de puerto 
+else
+    grep "Listen $1" "/etc/apache2/ports.conf"
+    if["$?" -eq "0"]
+    then
+        echo "Listen encontrado en ports.conf"
+    else
+        echo "No encontrado y agregado"
+        echo "Listen $1 >> "/etc/apache2/ports.conf
+      fi
+fi
+2--
+if [ "$#" -ne 2 ]; 
+then
+    echo "Uso: $0 <IP> <dominio>"
+    exit 1
+fi    
+if grep -q "$2" "$HOSTS_FILE"; then
+    echo "El dominio $2 ya existe en el archivo hosts."
+else
+    # Añadir la IP y el dominio al archivo hosts
+    echo "$1 $2" | sudo tee -a "$HOSTS_FILE" > /dev/null
+    echo "Se ha añadido $2 con la IP $1 al archivo hosts."
+fi
+3--
+#!/bin/bash
+
+if [ "$#" -ne 3 ]; then
+    echo "Uso: $0 <título> <cabecera> <mensaje>"
+    exit 1
+fi
+
+TITULO="$1"
+CABECERA="$2"
+MENSAJE="$3"
+
+
+ARCHIVO="pagina.html"
+
+cat <<EOF > "$ARCHIVO"
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$TITULO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>$CABECERA</h1>
+    <p>$MENSAJE</p>
+</body>
+</html>
+EOF
+
+echo "Página web creada: $ARCHIVO"
