@@ -68,3 +68,55 @@ sudo systemctl restart apache2
 
 y como podemos comprobar funciona 
 ![ubuntu](imagenes/4.PNG) 
+Ahora debemos realizar la configuracion de wordpress y para ello debemos rellenar los campos con la base de datos creada anteriormente y como usuario y contraseña usaremos root para que tenga acceso directo y no debamos modificar los persmisos.
+![ubuntu](imagenes/5.PNG) 
+
+--Instalacion de Python 
+sudo apt install python3 python3-pip libapache2-mod-wsgi-py3
+pip3 install flask
+
+debemos crear nuestros archivos dentro del dirrectorio  /var/www/departamentos.centro.intranet
+que seran los siguientes 
+![ubuntu](imagenes/6.PNG) 
+![ubuntu](imagenes/7.PNG) 
+y una vez los archivos se hayan creado debemos modificar la configuracion del sitio
+sudo nano /etc/apache2/sites-available/departamentos.centro.intranet.conf 
+y debe quedar una cosa como esta 
+<VirtualHost *:80>
+    ServerAdmin webmaster@departamentos.centro.intranet
+    ServerName departamentos.centro.intranet
+    DocumentRoot /var/www/departamentos.centro.intranet
+    WSGIScriptAlias / /var/www/departamentos.centro.intranet/app.wsgi
+    <Directory /var/www/departamentos.centro.intranet>
+        Require all granted
+    </Directory>
+  
+</VirtualHost>
+una vez el archivo de configuracion se haya modificado debemos reinciar apache2 y activar el sitio web 
+sudo a2ensite departamentos.centro.intranet
+sudo systemctl restart apache2
+
+![ubuntu](imagenes/8.PNG) 
+Como podemos comprobar funciona.
+--Instalar AWSTATS
+sudo apt install awstats
+Para configurarlo dentro de nuestro sitio web debemos copiar el archivo de configuracion predeterminado de awstats en el directorio de nuestro sitio web 
+sudo cp /etc/awstats/awstats.conf /etc/awstats/awstats.centro.intranet.conf
+una vez ahi modificamos el archivo para que mire a nuestro dominio
+sudo nano /etc/awstats/awstats.centro.intranet.conf
+![ubuntu](imagenes/9.PNG) 
+
+--Instalar Nginx 
+sudo apt install nginx php-fpm -y
+
+configuramos Ngix modificando el archivo por defecto de ngin sudo nano /etc/nginx/sites-available/default y modifcamos el codigo para que escuche al puerto 8080 y pueda utilizar php 
+![ubuntu](imagenes/10.PNG) 
+con el comando sudo nginx -t podemos comprobar la sintaxis del archivo de configuracion 
+![ubuntu](imagenes/11.PNG) 
+como vemos ningun problema 
+--Instalar php my admin. 
+sudo apt install phpmyadmin -y
+sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+con este ultimo comando hacemos la instalacion de phpmyadmin en apache se comparta con nginx y no tengamos problemas de compatibilidad.
+
+
