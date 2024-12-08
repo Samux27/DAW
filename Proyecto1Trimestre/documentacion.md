@@ -119,4 +119,6 @@ sudo apt install phpmyadmin -y
 sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
 con este ultimo comando hacemos la instalacion de phpmyadmin en apache se comparta con nginx y no tengamos problemas de compatibilidad.
 
+![ubuntu](imagenes/12.PNG)
 
+Una vez todo queda bien configurado ya podriamso acceder a nuestro phpmyadmin desde nginx 
