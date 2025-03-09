@@ -130,9 +130,58 @@ docker run -d -p 80:3000 --name temperaturas-frontend --network red_temperaturas
 Y si accedemos a localhost podemos comprobar que la aplicacion esta 
 
 ![image](https://github.com/user-attachments/assets/ef9cedb1-7596-4e1c-a964-bafd69f34d37)
+EJEMPLO 3 - Despliegue de Wordpress + mariadb
+Para instalar WordPress se requieren dos contenedores: uno para la base de datos (utilizando la imagen de MariaDB) y otro para el servidor web que aloja la aplicación (utilizando la imagen de WordPress). Ambos contenedores deben estar en la misma red y poder comunicarse mediante nombres (resolución DNS), ya que no sabemos qué dirección IP se asignará a cada uno. Por esta razón, crearemos los contenedores dentro de la misma red.
+
+docker network create red_wp
+![image](https://github.com/user-attachments/assets/fe1fa3b7-94cb-4119-9922-5419397ce6c1)
+
+Viendo la documentacion de la imagen de mariadb y la imagen de wordpress podemso ejecutar los siguiente comandos
+
+![image](https://github.com/user-attachments/assets/631eb8f9-f008-43e5-865e-ad37da01a891)
+![image](https://github.com/user-attachments/assets/c7988cb4-c80d-4ebf-8345-350bdabf239d)
+ Una vez ejecutados los comandos podemos comprobar los contenedores y si visitamos localhost.
+ ![image](https://github.com/user-attachments/assets/8879e54a-c3ea-454b-8d6c-db79d923c053)
 
 Actividad 5
 ![image](https://github.com/user-attachments/assets/34673bca-38aa-4c32-bf7a-b66ff29f2405)
 
 Actividad 6
 ![image](https://github.com/user-attachments/assets/603d4da6-c2f3-40d4-891c-2a42292d91e4)
+EJEMPLO 1 - Construcción de imágenes con una página estática
+
+En este ejemplo vamos a crear una imagen con una página estática. Vamos a crear tres versiones de la imagen.
+Tenemos un directorio, que en Docker se denomina contexto, donde tenemos el fichero Dockerfile y un directorio, llamado public_html con nuestra página web:
+ls Dockerfile  public_html
+
+![image](https://github.com/user-attachments/assets/d80ad634-3ff7-4bee-8f81-4a5b7b89f106)
+En este caso vamos a usar una imagen base de un sistema operativo sin ningún servicio. El fichero Dockerfile será el siguiente:
+![image](https://github.com/user-attachments/assets/96c5daa2-001a-4566-926f-a9776cd91f3b)
+Al utilizar la imagen base debian:stable-slim, es necesario instalar los paquetes requeridos para configurar el servidor web, en este caso apache2. Posteriormente, se añadirá el contenido del directorio public_html en la ruta /var/www/html/ dentro del contenedor. Finalmente, se especificará el comando que debe ejecutarse al iniciar un contenedor basado en esta imagen: se pondrá en marcha el servidor web en segundo plano.
+y Para crear la imagen usamos docker build -t samux27/ejemplo1:v1 .
+![image](https://github.com/user-attachments/assets/4d7f16e4-855e-4cef-b253-4ec6029653f0)
+Visito localhost y vemos 
+![image](https://github.com/user-attachments/assets/2ddd904c-151e-48e3-82aa-ceb253fee4ec)
+EJEMPLO 2 - Construcción de imágenes con una una aplicación PHP
+
+En el contexto voy a tener el fichero Dockerfile y un directorio, llamado app con mi aplicación.
+
+En este caso voy a usar una imagen base de un sistema operativo sin ningún servicio. El fichero Dockerfile será el siguiente:
+![image](https://github.com/user-attachments/assets/a791ef08-1527-4e36-b9dc-961e5d032fd0)
+y creamos la imagen con docker build -t samux27/ejemplo2:v1 .
+![image](https://github.com/user-attachments/assets/1f04e404-dff9-4c32-82d0-2ec7131b1c7b)
+
+Y comprobamos en localhost 
+![image](https://github.com/user-attachments/assets/f8865da2-4849-49b1-943c-e6aebc0fa513)
+EJEMPLO 3 - Construcción de imágenes con una una aplicación Python
+He descargado la versión 1 del repositorio https://github.com/josedom24/curso_docker_ies/tree/main/ejemplos/modulo5/ejemplo3/app para llevar a cabo esta actividad.
+En este ejemplo, crearé una imagen destinada a servir una aplicación desarrollada en Python utilizando el framework Flask. Dicha aplicación se ejecutará en el puerto 3000/tcp.
+El contexto del proyecto incluirá el archivo Dockerfile y un directorio llamado app que contendrá la aplicación.
+En este caso, utilizaremos una imagen base de un sistema operativo sin servicios preinstalados. El contenido del archivo Dockerfile será el siguiente:
+![image](https://github.com/user-attachments/assets/e8d1c2d2-72a9-4304-a88e-4b6d6f4a258e)
+y creamos la imagen 
+docker build -t samux27/ejemplo3:v1 .
+![image](https://github.com/user-attachments/assets/9d3a1f60-ece7-4226-bddb-7893f0d75f10)
+docker run -d -p 80:3000 --name ejemplo2 samux27/ejemplo3:v1
+![image](https://github.com/user-attachments/assets/ccc86ac3-16b5-4526-9a17-ae79f6ad0876)
+
